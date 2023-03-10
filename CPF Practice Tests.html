@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>CPF Practice Tests</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+
+    body {
+      position: relative;
+      min-height: 100%;
+    }
+
+    body::after {
+      content: '';
+      display: block;
+      height: 50px;
+      /* Set same as footer's height */
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 50px;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {
+      height: 450px
+    }
+
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 8px;
+      text-align: right;
+    }
+
+    .btn-footer {
+      width: 100px;
+    }
+
+    input[type=checkbox],
+    input[type=radio] {
+      transform: scale(1.3);
+      -ms-transform: scale(1.3);
+      -webkit-transform: scale(1.3);
+      margin-right: 5px;
+    }
+
+    #question-content {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .answer span {
+      display: inline-block;
+      padding: 5px;
+      font-size: 16px;
+      font-weight: normal;
+    }
+
+    .answer {
+      text-align: left;
+      display: block;
+      margin-left: 20px;
+    }
+
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+
+      .row.content {
+        height: auto;
+      }
+    }
+
+    p {
+      margin: 0 0 0px;
+    }
+
+    .progess-status {
+      color: white !important;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .wrong-answer-panel {
+      background-color: #f7ecec;
+      border-left: 8px solid #e51f1f;
+      margin-bottom: 0;
+    }
+
+    .correct-answer-panel {
+      background-color: #E9FBE9;
+      border-left: 8px solid #52E052;
+      margin-bottom: 0;
+    }
+
+    .panel-fail {
+      border-color: #ff9090;
+    }
+
+    .panel-success>.panel-heading {
+      color: #3c763d;
+      background-color: #dff0d8;
+      border-color: #d6e9c6;
+    }
+
+    .panel-fail>.panel-heading {
+      color: #db0000;
+      background-color: #ffe5e5;
+      border-color: #ffffff;
+    }
+
+    #quiz {
+      margin-top: 8px;
+      font-weight: bold;
+    }
+
+    #result {
+      float: left;
+      font-weight: bold;
+      font-size: 17px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li>
+            <select id="quiz" class="form-control">
+            </select>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#" class="progess-status">Question <span id="current-question-no"></span>/<span
+                id="total-question"></span></a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="question">
+
+      <div id="question1">
+        <div class="panel-body">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <p id="question-content"></p>
+              </h4>
+            </div>
+            <div class="panel-body">
+              <div id="answers-content">
+              </div>
+            </div>
+          </div>
+          <div id="explanation-panel" class="panel hidden">
+            <div class="panel-heading">
+              <h4 class="panel-title"><a class="collapsed" id="question-status" data-toggle="collapse">Correct</a>
+              </h4>
+            </div>
+            <div id="answer1">
+              <div class="panel-body">
+                <div class="alert" style="margin-bottom: 0;" role="alert">
+                  <h4><strong><i class="fa fa-sticky-note-o" aria-hidden="true"></i> Explanation</strong></h4>
+                  <div id="explanation" class="alert" role="alert">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="container-fluid">
+    <span id="result">Correct <span id="correct-percent"></span>% <button id="btn-reset" class="btn btn-default btn-footer">Reset</button></span>
+    <button id="btn-previous" class="btn btn-default btn-footer">Previous</button>
+    <button id="btn-next" class="btn btn-default btn-footer">Next</button>
+    <button id="btn-finish" class="btn btn-default btn-footer hidden">Finish</button>
+  </footer>
+
+  <div class="hidden">
+    <label class="answer answer-template">
+      <input type="radio" name="answer" /><span class="answer-content"></span>
+    </label>
+  </div>
+</body>
+
+<script src="quiz-1.js"></script>
+<script>
+  var allQuiz = [quiz1, quiz2, quiz3, quiz4, quiz5, quiz6];
+  var currentQuizNo = 0;
+  var totalQuestions;
+  var isShowAnswer = false;
+  var currentQuestionNo = 0;
+  var allUserAnswers = new Map();
+  var answersValue = ["a", "b", "c", "d", "e"];
+  var quiz = quiz1;
+
+  $(function () {
+
+    initUi();
+    init(0);
+
+    $("#btn-previous").click(function () {
+      if (currentQuestionNo == 0) {
+        return false;
+      }
+      saveAnswer(currentQuestionNo);
+
+      currentQuestionNo -= 1;
+      loadQuestion(currentQuestionNo);
+    });
+
+    $("#btn-next").click(function () {
+      if (currentQuestionNo == totalQuestions - 1) {
+        return false;
+      }
+      saveAnswer(currentQuestionNo);
+
+      currentQuestionNo += 1;
+      loadQuestion(currentQuestionNo);
+    });
+
+    $("#btn-reset").click(function () {
+      localStorage.removeItem(currentQuizNo);
+      init(currentQuizNo);
+    });
+
+    $('#quiz').change(function () {
+      init($(this).val());
+    });
+
+    $("#btn-finish").click(function () {
+      saveAnswer(currentQuestionNo);
+
+      alert("Correct answer: " + calculateCorrectPercent() + "%");
+      
+      showResult();
+      isShowAnswer = true;
+      currentQuestionNo = 0;
+      loadQuestion(currentQuestionNo);
+
+      $(this).hide();
+    });
+
+  });
+
+  function initUi() {
+    var quizSelect = $("#quiz");
+    for (let i = 0; i < allQuiz.length; i++) {
+      var quizOpion = $("<option>");
+      quizOpion.attr("value", i);
+      quizOpion.text("CPF Quiz " + (i + 1));
+      quizSelect.append(quizOpion);
+    }
+  }
+
+  function showResult() {
+    if (isShowAnswer) {
+      $("#correct-percent").text(calculateCorrectPercent())
+      $("#result").removeClass("hidden");
+    } else {
+      $("#result").addClass("hidden");
+    }
+  }
+
+  function init(quizNo) {
+    var lastAttemptJson = localStorage.getItem(quizNo);
+    if (lastAttemptJson != null) {
+      lastAttempt = JSON.parse(lastAttemptJson);
+      isShowAnswer = lastAttempt.isShowAnswer;
+      allUserAnswers = lastAttempt.allUserAnswers;
+      currentQuestionNo = lastAttempt.currentQuestionNo;
+    } else {
+      isShowAnswer = false;
+      allUserAnswers = new Object();
+      currentQuestionNo = 0;
+    }
+
+    currentQuizNo = quizNo;
+    quiz = allQuiz[currentQuizNo];
+    totalQuestions = quiz.count;
+    $("#total-question").text(totalQuestions);
+    showResult();
+
+    loadQuestion(currentQuestionNo);
+
+  }
+
+  function loadQuestion(questionNo) {
+    var question = quiz.results[questionNo];
+
+    var questionContent = question.prompt.question;
+    var answers = question.prompt.answers;
+    var explanation = question.prompt.explanation;
+
+    var isMultipleChoice = question.assessment_type == "multi-select";
+
+    $("#question-content").html(questionContent);
+    $("#answers-content").empty();
+
+    var answerTemplate = $(".answer-template");
+
+    answers.forEach((answer, index) => {
+      var answerElement = answerTemplate.clone();
+      var answerValue = answersValue[index];
+
+      var isChecked = allUserAnswers.hasOwnProperty(questionNo) && allUserAnswers[questionNo].includes(answerValue);
+      answerElement.find("input").prop('type', isMultipleChoice ? "checkbox" : "radio").prop('checked', isChecked).prop('disabled', isShowAnswer).val(answerValue);
+      answerElement.find("span").html(answer);
+
+      if (isShowAnswer) {
+        if (quiz.results[questionNo].correct_response.includes(answerValue)) {
+          answerElement.find("span").css("color", "blue");
+        }
+      }
+
+      $("#answers-content").append(answerElement);
+    });
+
+    $("#current-question-no").text(currentQuestionNo + 1);
+
+    if (isShowAnswer) {
+      $("#explanation-panel").removeClass("hidden");
+      $("#explanation").html(explanation);
+
+      var isThisQuestionCorrect = isCorrectAwnser(questionNo);
+      $("#question-status").text(isThisQuestionCorrect ? "Correct" : "Wrong");
+      $("#explanation").removeClass().addClass("alert").addClass(isThisQuestionCorrect ? "correct-answer-panel" : "wrong-answer-panel");
+      $("#explanation-panel").removeClass().addClass("panel").addClass(isThisQuestionCorrect ? "panel-success" : "panel-fail");
+    } else {
+      $("#explanation-panel").addClass("hidden");
+    }
+
+    if (questionNo == totalQuestions - 1) {
+      $("#btn-finish").removeClass("hidden");
+    } else {
+      $("#btn-finish").addClass("hidden");
+    }
+  }
+
+  function saveAnswer(questionNo) {
+    var userAnswers = [];
+    $('input[name="answer"]:checked').each(function (i) {
+      userAnswers[i] = $(this).val();
+    });
+
+    if (userAnswers.length == 0) {
+      delete allUserAnswers.questionNo;
+    } else {
+      allUserAnswers[questionNo] = userAnswers;
+    }
+
+    localStorage.setItem(currentQuizNo, JSON.stringify({ allUserAnswers: allUserAnswers, isShowAnswer: isShowAnswer, currentQuestionNo: currentQuestionNo }));
+  }
+
+  function calculateCorrectPercent() {
+    let totalCorrectAnwser = 0;
+    for (let index = 0; index < quiz.results.length; index++) {
+      if (isCorrectAwnser(index)) {
+        totalCorrectAnwser += 1;
+      }
+    }
+    return Math.round(totalCorrectAnwser * 100 / totalQuestions);
+  }
+
+  function isCorrectAwnser(questionNo) {
+    let correctResponse = quiz.results[questionNo].correct_response;
+    let userResponse = allUserAnswers[questionNo];
+
+    return JSON.stringify(correctResponse) == JSON.stringify(userResponse);
+  }
+
+</script>
+
+</html>
