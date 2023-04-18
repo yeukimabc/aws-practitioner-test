@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -216,7 +215,8 @@
   </div>
 
   <footer class="container-fluid">
-    <span id="result">Correct <span id="correct-percent"></span>% <button id="btn-reset" class="btn btn-default btn-footer">Reset</button></span>
+    <span id="result">Correct <span id="correct-percent"></span>% <button id="btn-reset"
+        class="btn btn-default btn-footer">Reset</button></span>
     <button id="btn-previous" class="btn btn-default btn-footer">Previous</button>
     <button id="btn-next" class="btn btn-default btn-footer">Next</button>
     <button id="btn-finish" class="btn btn-default btn-footer hidden">Finish</button>
@@ -230,8 +230,9 @@
 </body>
 
 <script src="quiz-1.js"></script>
+<script src="random-quiz-1.js"></script>
 <script>
-  var allQuiz = [quiz1, quiz2, quiz3, quiz4, quiz5, quiz6];
+  var allQuiz = [quiz1, quiz2, quiz3, quiz4, quiz5, quiz6].concat(allRandomQuiz1);
   var currentQuizNo = 0;
   var totalQuestions;
   var isShowAnswer = false;
@@ -278,7 +279,7 @@
       saveAnswer(currentQuestionNo);
 
       alert("Correct answer: " + calculateCorrectPercent() + "%");
-      
+
       showResult();
       isShowAnswer = true;
       currentQuestionNo = 0;
@@ -294,7 +295,7 @@
     for (let i = 0; i < allQuiz.length; i++) {
       var quizOpion = $("<option>");
       quizOpion.attr("value", i);
-      quizOpion.text("CPF Quiz " + (i + 1));
+      quizOpion.text(((i <= 5) ? "CPF Quiz " : "CPF Random Quiz ") + (i + 1));
       quizSelect.append(quizOpion);
     }
   }
