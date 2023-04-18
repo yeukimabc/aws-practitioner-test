@@ -27,7 +27,7 @@
 
   $(function () {
     var totalQuiz = allQuiz.length;
-    var totalQuestions = allQuiz[0].length;
+    var totalQuestions = allQuiz[0].count;
 
     var allQuestions = new Array();
 
@@ -42,7 +42,7 @@
 
     var allNewQuiz = new Array();
     for (let i = 0; i < totalQuiz; i++) {
-      allNewQuiz.push({results: allQuestions.splice(i, 65)});
+      allNewQuiz.push({ count: totalQuestions, results: allQuestions.splice(i, 65) });
     }
 
     $("#output").text("var allRandomQuiz1 = " + JSON.stringify(allNewQuiz));

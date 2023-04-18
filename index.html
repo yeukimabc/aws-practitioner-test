@@ -257,7 +257,7 @@
     });
 
     $("#btn-next").click(function () {
-      if (currentQuestionNo == totalQuestions - 1) {
+      if (currentQuestionNo >= totalQuestions - 1) {
         return false;
       }
       saveAnswer(currentQuestionNo);
@@ -276,12 +276,12 @@
     });
 
     $("#btn-finish").click(function () {
+      isShowAnswer = true;
       saveAnswer(currentQuestionNo);
 
       alert("Correct answer: " + calculateCorrectPercent() + "%");
 
       showResult();
-      isShowAnswer = true;
       currentQuestionNo = 0;
       loadQuestion(currentQuestionNo);
 
@@ -377,7 +377,7 @@
       $("#explanation-panel").addClass("hidden");
     }
 
-    if (questionNo == totalQuestions - 1) {
+    if (questionNo >= totalQuestions - 1) {
       $("#btn-finish").removeClass("hidden");
     } else {
       $("#btn-finish").addClass("hidden");
