@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>CPF Practice Tests</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div id="output"></div>
+</body>
+
+<script src="quiz-1.js"></script>
+<script>
+  var allQuiz = [quiz1, quiz2, quiz3, quiz4, quiz5, quiz6];
+  var currentQuizNo = 0;
+  var totalQuestions;
+  var isShowAnswer = false;
+  var currentQuestionNo = 0;
+  var allUserAnswers = new Map();
+  var answersValue = ["a", "b", "c", "d", "e"];
+  var quiz = quiz1;
+
+  $(function () {
+    var totalQuiz = allQuiz.length;
+    var totalQuestions = allQuiz[0].length;
+
+    var allQuestions = new Array();
+
+    allQuiz.forEach(quiz => {
+      allQuestions = allQuestions.concat(quiz.results);
+    });
+
+    allQuestions.forEach((question, i) => {
+      const j = Math.floor(Math.random(allQuiz.length));
+      [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
+    })
+
+    var allNewQuiz = new Array();
+    for (let i = 0; i < totalQuiz; i++) {
+      allNewQuiz.push({results: allQuestions.splice(i, 65)});
+    }
+
+    $("#output").text("var allRandomQuiz1 = " + JSON.stringify(allNewQuiz));
+  });
+</script>
+
+</html>
